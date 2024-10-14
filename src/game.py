@@ -1,5 +1,6 @@
 import pygame
 from tablero import Tablero
+from powerup import PowerUps
 
 # Colores básicos
 BLACK = (0, 0, 0)
@@ -16,9 +17,13 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.tablero = Tablero(WIDTH, HEIGHT, CELL_SIZE)
-
+        self.powerups = PowerUps(self.tablero)
         self.running = True
         self.score = 0
+
+
+    def check_collisions(self):
+        return 
 
     def handle_input(self):
         for event in pygame.event.get():
@@ -42,10 +47,10 @@ class Game:
 
         while self.running:
             self.handle_input()
-
+            self.check_collisions()
             self.screen.fill(BLACK)
             self.tablero.draw(self.screen)
-
+            self.powerups.draw(self.screen)
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS
 
