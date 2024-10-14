@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
 
-  # Servicio de la API
   snake-game:
     build:
       context: .
