@@ -37,6 +37,13 @@ class Game:
         # Colisión con obstáculos
         if (head_x, head_y) in self.obstaculos.obstacles:
             self.running = False
+            
+        # Colisión con power-up
+        if self.powerups.position == (head_x, head_y):
+            self.snake.grow()
+            self.powerups.generar_power_up()
+            self.score += 10  # Aumentar puntuación
+
 
             
     def handle_input(self):
@@ -64,7 +71,7 @@ class Game:
             self.tablero.draw(self.screen)
             self.snake.draw(self.screen)
             self.obstaculos.draw(self.screen)
-            self.power_ups.draw(self.screen)
+            self.powerups.draw(self.screen)
 
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS

@@ -4,7 +4,7 @@ GREEN = (0, 255, 0)
 CELL_SIZE = 20
 
 class Snake:
-    def _init_(self):
+    def __init__(self):
         self.body = [(10, 10)]  # Lista de tuplas representando las posiciones del cuerpo
         self.direction = (1, 0)  # Movimiento inicial hacia la derecha
         self.growing = False
