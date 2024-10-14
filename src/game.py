@@ -1,5 +1,6 @@
 import pygame
 from tablero import Tablero
+from powerup import PowerUps
 from obstaculos import Obstaculos
 from snake import Snake
 # Colores básicos
@@ -15,8 +16,8 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Snake Mejorado")
         self.clock = pygame.time.Clock()
-
         self.tablero = Tablero(WIDTH, HEIGHT, CELL_SIZE)
+        self.powerups = PowerUps(self.tablero)
         self.snake = Snake()
         self.obstaculos = Obstaculos(self.tablero)
 
@@ -37,6 +38,7 @@ class Game:
         if (head_x, head_y) in self.obstaculos.obstacles:
             self.running = False
 
+            
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -58,7 +60,6 @@ class Game:
             self.handle_input()
             self.snake.move()
             self.check_collisions()
-
             self.screen.fill(BLACK)
             self.tablero.draw(self.screen)
             self.snake.draw(self.screen)
