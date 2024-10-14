@@ -62,7 +62,8 @@ class Game:
 
     def game_loop(self):
         self.obstaculos.generar_obstaculos(5)  # Generar obstáculos
-
+        self.powerups.generar_power_up()  # Generar primer power-up
+        
         while self.running:
             self.handle_input()
             self.snake.move()
