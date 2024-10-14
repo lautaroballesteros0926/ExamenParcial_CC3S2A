@@ -1,6 +1,6 @@
 import pygame
 from tablero import Tablero
-
+from obstaculos import Obstaculos
 # Colores básicos
 BLACK = (0, 0, 0)
 
@@ -14,8 +14,8 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Snake Mejorado")
         self.clock = pygame.time.Clock()
-
         self.tablero = Tablero(WIDTH, HEIGHT, CELL_SIZE)
+        self.obstaculos = Obstaculos(self.tablero)
 
         self.running = True
         self.score = 0
@@ -45,6 +45,7 @@ class Game:
 
             self.screen.fill(BLACK)
             self.tablero.draw(self.screen)
+            self.obstaculos(self.screen)
 
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS
