@@ -1,8 +1,8 @@
 import pygame
-from tablero import Tablero
-from powerup import PowerUps
-from obstaculos import Obstaculos
-from snake import Snake
+from src.tablero import Tablero
+from src.powerup import PowerUps
+from src.obstaculos import Obstaculos
+from src.snake import Snake
 # Colores básicos
 BLACK = (0, 0, 0)
 
@@ -62,7 +62,7 @@ class Game:
 
     def game_loop(self):
         self.obstaculos.generar_obstaculos(5)  # Generar obstáculos
-        self.powerups.draw()
+        self.powerups.generar_power_up()
         while self.running:
             self.handle_input()
             self.snake.move()
