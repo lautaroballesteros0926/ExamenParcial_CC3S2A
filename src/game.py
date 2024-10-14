@@ -1,6 +1,6 @@
 import pygame
 from tablero import Tablero
-from powerup import PowerUps
+from powerup import Food, Inmunidad, Double_Points
 from obstaculos import Obstaculos
 from snake import Snake
 # Colores básicos
@@ -17,7 +17,8 @@ class Game:
         pygame.display.set_caption("Snake Mejorado")
         self.clock = pygame.time.Clock()
         self.tablero = Tablero(WIDTH, HEIGHT, CELL_SIZE)
-        self.powerups = PowerUps(self.tablero)
+        self.food = Food(self.tablero)
+        self.double_points = Double_Points(self.tablero)
         self.snake = Snake()
         self.obstaculos = Obstaculos(self.tablero)
 
@@ -30,7 +31,7 @@ class Game:
         if not (0 <= head_x < self.tablero.columns and 0 <= head_y < self.tablero.rows):
             self.running = False
 
-        # Colisión con el propio cuerpo
+        # Colisión con el prfoodio cuerpo
         if len(self.snake.body) != len(set(self.snake.body)):
             self.running = False
 
@@ -38,11 +39,19 @@ class Game:
         if (head_x, head_y) in self.obstaculos.obstacles:
             self.running = False
             
-        # Colisión con power-up
-        if self.powerups.position == (head_x, head_y):
+        # Colisión con Food
+        if self.food.position == (head_x, head_y):
             self.snake.grow()
-            self.powerups.generar_power_up()
+            self.food.generar_power_up()
             self.score += 10  # Aumentar puntuación
+            print(self.score)
+        
+        # Colisión con Double_point
+        if self.double_points.position == (head_x, head_y):
+            self.snake.grow()
+            self.double_points.generar_power_up()
+            self.score += 20  # Aumentar puntuación
+            print(self.score)
 
 
             
@@ -62,7 +71,7 @@ class Game:
 
     def game_loop(self):
         self.obstaculos.generar_obstaculos(5)  # Generar obstáculos
-        self.powerups.generar_power_up()  # Generar primer power-up
+        self.double_points.generar_power_up()  # Generar primer power-up
         
         while self.running:
             self.handle_input()
@@ -72,7 +81,7 @@ class Game:
             self.tablero.draw(self.screen)
             self.snake.draw(self.screen)
             self.obstaculos.draw(self.screen)
-            self.powerups.draw(self.screen)
+            self.double_points.draw(self.screen)
 
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS
