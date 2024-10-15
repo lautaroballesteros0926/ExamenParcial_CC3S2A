@@ -1,6 +1,6 @@
 import pygame
 from src.tablero import Tablero
-from src.powerup import Food Inmunidad, Double_Points
+from src.powerup import Food, Inmunidad, Double_Points
 from src.obstaculos import Obstaculos
 from src.snake import Snake
 
