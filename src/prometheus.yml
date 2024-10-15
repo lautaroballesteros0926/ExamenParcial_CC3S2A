@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 1s  # Intervalo de recolección de métricas
+
+scrape_configs:
+  - job_name: 'snake-game'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['snake-game-container:8000']
