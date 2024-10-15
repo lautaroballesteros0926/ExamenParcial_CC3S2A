@@ -1,8 +1,9 @@
 import pygame
-from tablero import Tablero
-from powerup import Food, Inmunidad, Double_Points
-from obstaculos import Obstaculos
-from snake import Snake
+from src.tablero import Tablero
+from src.powerup import Food Inmunidad, Double_Points
+from src.obstaculos import Obstaculos
+from src.snake import Snake
+
 # Colores básicos
 BLACK = (0, 0, 0)
 
