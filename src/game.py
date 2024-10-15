@@ -1,8 +1,12 @@
 import pygame
-from tablero import Tablero
-from powerup import PowerUps
-from obstaculos import Obstaculos
-from snake import Snake
+from src.tablero import Tablero
+from src.powerup import PowerUps
+from src.obstaculos import Obstaculos
+from src.snake import Snake
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Colores básicos
 BLACK = (0, 0, 0)
 
