@@ -2,7 +2,7 @@ import pygame
 import random
 
 BLUE = (0, 0, 255)
-CELL_SIZE = 20
+CELL_SIZE = 40
 
 class PowerUps:
     def __init__(self, tablero):

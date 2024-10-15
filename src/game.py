@@ -3,16 +3,14 @@ from src.tablero import Tablero
 from src.powerup import PowerUps
 from src.obstaculos import Obstaculos
 from src.snake import Snake
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from src.menu import Menu
 
 # Colores básicos
 BLACK = (0, 0, 0)
 
 # Tamaño de la ventana
-WIDTH, HEIGHT = 600, 400
-CELL_SIZE = 20
+WIDTH, HEIGHT = 800, 600
+CELL_SIZE = 40
 
 class Game:
     def __init__(self):
@@ -27,7 +25,8 @@ class Game:
 
         self.running = True
         self.score = 0
-
+        self.controller = 1 
+        self.menu = Menu()
     def check_collisions(self):
         # Colisión con los bordes del tablero
         head_x, head_y = self.snake.body[0]
@@ -69,20 +68,25 @@ class Game:
         self.powerups.generar_power_up()  # Generar primer power-up
         
         while self.running:
-            self.handle_input()
-            self.snake.move()
-            self.check_collisions()
-            self.screen.fill(BLACK)
-            self.tablero.draw(self.screen)
-            self.snake.draw(self.screen)
-            self.obstaculos.draw(self.screen)
-            self.powerups.draw(self.screen)
+            if(self.controller == 1): # Menu principal 
+                action = self.menu.handle_input()
+                if action == 'start':
+                    self.controller = 2  # Entrar al juego
+                elif action == 'quit':
+                    self.running = False
+                self.menu.draw(self)
+            if (self.controller == 2):  # Directamente entrar al Juego 
+                self.handle_input()
+                self.snake.move()
+                self.check_collisions()
+                self.screen.fill(BLACK)
+                self.tablero.draw(self.screen)
+                self.snake.draw(self.screen)
+                self.obstaculos.draw(self.screen)
+                self.powerups.draw(self.screen)
 
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS
 
         pygame.quit()
 
-if __name__ == "__main__":
-    game = Game()
-    game.game_loop()
