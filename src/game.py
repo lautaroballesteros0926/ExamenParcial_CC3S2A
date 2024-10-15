@@ -73,7 +73,7 @@ class Game:
                 if action == 'start':
                     self.controller = 2  # Entrar al juego
                 elif action == 'quit':
-                    self.running = False
+                    self.running = False 
                 self.menu.draw(self)
             if (self.controller == 2):  # Directamente entrar al Juego 
                 self.handle_input()
