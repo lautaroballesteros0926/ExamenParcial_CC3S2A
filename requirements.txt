@@ -1,1 +1,4 @@
 pygame
+prometheus_client
+requests
+fastapi

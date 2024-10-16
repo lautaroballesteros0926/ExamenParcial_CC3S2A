@@ -1,11 +1,13 @@
 import pygame
 from src.tablero import Tablero
-from src.powerup import Food, Inmunidad, Double_Points
+from src.powerup import Food, Double_Points
 from src.obstaculos import Obstaculos
 from src.snake import Snake
 from src.menu import Menu
-
-
+import prometheus_client
+from prometheus_client import start_http_server
+from fastapi import Depends,FastAPI, HTTPException, Response
+import requests
 # Colores básicos
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -13,6 +15,8 @@ WHITE = (255, 255, 255)
 # Tamaño de la ventana
 WIDTH, HEIGHT = 800, 600
 CELL_SIZE = 40
+
+app = FastAPI()
 
 class Game:
     def __init__(self):
@@ -26,10 +30,18 @@ class Game:
         self.snake = Snake()
         self.obstaculos = Obstaculos(self.tablero)
         self.controlador_nivel=0
-        self.colision = False
+
+        self.snake_score = prometheus_client.Counter(
+            "snake_score",
+            "score del snake"
+        )
+        self.snake_lives = prometheus_client.Gauge(
+            "snake_lives",
+            "vidas del snake"
+        )
+        
         self.running = True
         self.score = 0
-        self.double_points.position=None
         self.controller = 1 
         self.menu = Menu()
     def check_collisions(self):
@@ -60,8 +72,7 @@ class Game:
             self.snake.grow()
             while True:
                 self.double_points.generar_power_up()
-                if self.double_points.position not in self.obstaculos.obstacles:
-
+                if self.food.position not in self.obstaculos.obstacles:
                     print("ok")
                     break
                 else:
@@ -77,7 +88,7 @@ class Game:
                 self.running = False        
             else:
                 self.running = True  
-                self.colision = True
+                self.colision = False
                 self.snake.body=[(10, 10)]
                 pygame.time.delay(400)
                 
@@ -115,16 +126,7 @@ class Game:
                 elif event.key == pygame.K_RIGHT:
                     self.snake.set_direction(1, 0)
                     break
-    
-    def level_up(self,puntos):
-        if puntos>=50:
-            nivel=self.obstaculos.nivel
-            self.obstaculos.nivel=nivel+1
-            self.obstaculos.niveles(nivel)
-            self.snake.body=[(10, 10)]
-            self.controlador_nivel=0
-            self.tablero.draw_nivel(self.screen,self.obstaculos.nivel)   
-            self.snake.growing=False  
+
 
     def game_loop(self):
         self.obstaculos.generar_obstaculos(3)  # Generar obstáculos
@@ -164,16 +166,42 @@ class Game:
                 self.screen.fill(BLACK)
                 self.snake.draw(self.screen)
                 self.obstaculos.draw(self.screen)
-                self.food.draw(self.screen)
-                self.double_points.draw(self.screen)
+                if self.controlador_nivel%30 == 0 and self.controlador_nivel != 0:
+                    self.double_points.draw(self.screen)
+                else:
+                    self.food.draw(self.screen)
                 self.tablero.draw_score(self.screen,self.score)
                 self.tablero.draw_life(self.screen,self.snake.life)
-                self.level_up(self.controlador_nivel)
-
+                if self.controlador_nivel>=50:
+                    nivel=self.obstaculos.nivel
+                    self.obstaculos.nivel=nivel+1
+                    self.obstaculos.niveles(nivel)
+                    self.snake.body=[(10, 10)]
+                    self.controlador_nivel=0
+                    self.tablero.draw_nivel(self.screen,self.obstaculos.nivel)   
+                    self.snake.growing=False
+                    
+                    
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS
+            self.snake_lives.inc()
+            self.snake_score.inc()
+            url = "http://localhost:8000/metrics"
+            start_http_server(8000)
 
         pygame.quit()
+        
+    #def metrics(self):
+    #    url = "http://localhost:8000/metrics"
+    #    response = requests.get(url)
+       
+    #@app.get("/metrics")
+    #def get_metrics():
+    #    return Response(
+    #        content=prometheus_client.generate_latest(),
+    #        media_type="text/plain",
+    #    )
+      
 
      
 
