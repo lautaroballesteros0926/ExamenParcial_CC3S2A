@@ -3,14 +3,16 @@ from src.tablero import Tablero
 from src.powerup import Food, Inmunidad, Double_Points
 from src.obstaculos import Obstaculos
 from src.snake import Snake
+from src.menu import Menu
+
 
 # Colores básicos
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Tamaño de la ventana
-WIDTH, HEIGHT = 600, 400
-CELL_SIZE = 20
+WIDTH, HEIGHT = 800, 600
+CELL_SIZE = 40
 
 class Game:
     def __init__(self):
@@ -27,7 +29,8 @@ class Game:
 
         self.running = True
         self.score = 0
-
+        self.controller = 1 
+        self.menu = Menu()
     def check_collisions(self):
         # Colisión con los bordes del tablero
         head_x, head_y = self.snake.body[0]
@@ -130,30 +133,35 @@ class Game:
 
 
         while self.running:
-            self.handle_input()
-            self.snake.move()
-            self.check_collisions()
-            self.screen.fill(BLACK)
-            self.snake.draw(self.screen)
-            self.obstaculos.draw(self.screen)
-            self.food.draw(self.screen)
-            self.double_points.draw(self.screen)
-            self.tablero.draw_score(self.screen,self.score)
-            self.tablero.draw_life(self.screen,self.snake.life)
-            if self.controlador_nivel>=50:
-                nivel=self.obstaculos.nivel
-                self.obstaculos.nivel=nivel+1
-                self.obstaculos.niveles(nivel)
-                self.snake.body=[(10, 10)]
-                self.controlador_nivel=0
-                self.tablero.draw_nivel(self.screen,self.obstaculos.nivel)   
-                self.snake.growing=False
+            if(self.controller == 1): # Menu principal 
+                action = self.menu.handle_input()
+                if action == 'start':
+                    self.controller = 2  # Entrar al juego
+                elif action == 'quit':
+                    self.running = False 
+                self.menu.draw(self)
+            if (self.controller == 2):  # Directamente entrar al Juego   
+                self.handle_input()
+                self.snake.move()
+                self.check_collisions()
+                self.screen.fill(BLACK)
+                self.snake.draw(self.screen)
+                self.obstaculos.draw(self.screen)
+                self.food.draw(self.screen)
+                self.double_points.draw(self.screen)
+                self.tablero.draw_score(self.screen,self.score)
+                self.tablero.draw_life(self.screen,self.snake.life)
+                if self.controlador_nivel>=50:
+                    nivel=self.obstaculos.nivel
+                    self.obstaculos.nivel=nivel+1
+                    self.obstaculos.niveles(nivel)
+                    self.snake.body=[(10, 10)]
+                    self.controlador_nivel=0
+                    self.tablero.draw_nivel(self.screen,self.obstaculos.nivel)   
+                    self.snake.growing=False
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS
 
         pygame.quit()
-
-
-if __name__ == "__main__":
-    game = Game()
-    game.game_loop()
+       
+      

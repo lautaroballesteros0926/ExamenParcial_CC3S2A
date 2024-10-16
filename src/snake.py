@@ -1,7 +1,7 @@
 import pygame
 
 GREEN = (0, 255, 0)
-CELL_SIZE = 20
+CELL_SIZE = 40
 
 class Snake:
     def __init__(self):

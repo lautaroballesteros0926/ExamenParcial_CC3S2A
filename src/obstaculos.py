@@ -2,7 +2,7 @@ import pygame
 import random
 
 RED = (255, 0, 0)
-CELL_SIZE = 20
+CELL_SIZE = 40
 
 class Obstaculos:
     def __init__(self, tablero):

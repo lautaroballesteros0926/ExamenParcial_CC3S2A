@@ -2,9 +2,11 @@ import pygame
 import random
 
 BLUE = (0, 0, 255)
+
 FUCSIA = (255, 0, 255)
 NARANJA = (0, 255, 120)
-CELL_SIZE = 20
+CELL_SIZE = 40
+
 
 class Food:
     def __init__(self, tablero):
