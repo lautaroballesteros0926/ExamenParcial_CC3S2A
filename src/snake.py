@@ -2,7 +2,6 @@ import pygame
 
 GREEN = (0, 255, 0)
 CELL_SIZE = 20
-
 class Snake:
     def __init__(self):
         self.body = [(10, 10)]  # Lista de tuplas representando las posiciones del cuerpo
