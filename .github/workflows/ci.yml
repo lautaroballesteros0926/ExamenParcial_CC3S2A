@@ -31,12 +31,13 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t snake-game .
-        
+
       - name: Run Docker container
         run: docker run -d --name snake-game-container snake-game
 
       - name: Run Behave tests
-        run: behave /features/steps/snaketest.py
+        run: |
+          behave features
 
       - name: Stop Docker container
         run: docker stop snake-game-container
