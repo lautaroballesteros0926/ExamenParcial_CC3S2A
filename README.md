@@ -59,6 +59,7 @@ Abre una terminal ubicate en la carpte raiz, del proyecto y ejecuta el siguiente
 
 ### Dockerización de la aplicación
 Se crean los contenedores correspondientes : 
+![image](https://github.com/user-attachments/assets/bf90226f-7c98-4599-a3fc-3f953b4d5368)
 
 
 # Requerimientos del juego completadas 
