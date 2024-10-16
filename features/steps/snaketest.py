@@ -1,12 +1,16 @@
 from src.game import Game
 from src.snake import Snake
+from src.powerup import Food, Double_Points
+from src.tablero import Tablero
 import pygame
 from behave import given,when,then
 import re
 pygame.init()   
 game=Game()
+tablero=Tablero(800,600,40)
 snake=Snake()
-
+food=Food(tablero)
+double_points=Double_Points(tablero)
 # TEST PARA EL MOVIMIENTO DE LA SNAKE 
 def movement(move):
     if move=='izquierda' and snake.body == [(9,10)]:
@@ -77,6 +81,46 @@ def check_movement(context):
     snake.body = [(10,10)]
     
 #################################################################################
+
+
+# TEST PARA LOS POWERUPS
+
+@given('un power-up {powerup} aparece en el mapa')
+def check_movimiento(context,powerup):
+    pattern=re.compile(r'(food|double_points)')
+    match=pattern.match(powerup.lower())
+    if match.group(1) == "food":
+        game.food.generar_power_up()
+    elif match.group(1) == "double_points":
+        game.double_points.generar_power_up()
+    else:
+        raise ValueError(f"No se pudo interpretar el movimiento: {powerup}")
+
+@when('la serpiente recolecta {powerup}')
+def do_movement(context,powerup):
+    pattern=re.compile(r'(food|double_points)')
+    match=pattern.match(powerup.lower())
+    if match.group(1) == "food":
+        print(game.food.position)
+        game.snake.body.insert(0, game.food.position)
+        print(game.snake.body)
+        game.check_collisions()
+        game.snake.body.pop()
+    elif match.group(1) == "double_points":
+        print(double_points.position)
+        game.snake.body.insert(0, game.double_points.position)
+        game.check_collisions()
+        game.snake.body.pop()
+
+        
+@then('el score de la serpiente incrementa en {score}')
+def check_movement(context,score):
+    assert game.score == int(score),"No se movio correctamente"
+    game.score = 0
+    
+    
+#################################################################################
+
 @given('que la serpiente se encuentra en la posicion {posicion}')
 def check_posicionsnake(context,posicion):
     pattern=re.compile(r'(\d+),(\d+)')
@@ -107,19 +151,9 @@ def check_posicionobstacle(context,posicion):
     
 @then('ocurre una colision')
 def end_game(context):
-    print(game.obstaculos.obstacles)
-    print(game.snake.body[0])
-    print(game.colision)
-    print(game.tablero.rows)
-    print(game.tablero.columns)
-    print(game.snake.life)
-    game.check_collisions()
-    print(game.snake.life)
-    
-    print(game.colision)
+    assert game.snake.body[0] == game.obstaculos.obstacles[0],"Se esperaba el jugador y el obstaculo colisionen"
     game.obstaculos.obstacles.pop()
     game.snake.body.pop()
-    assert game.colision,"Se esperaba el jugador y el obstaculo colisionen"
 
 
 
