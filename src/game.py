@@ -57,9 +57,16 @@ class Game:
         # Colisión con Double_point
         if self.double_points.position == (head_x, head_y):
             self.snake.grow()
-            self.double_points.activate=True
-            print(self.score)
+            while True:
+                self.double_points.generar_power_up()
+                if self.food.position not in self.obstaculos.obstacles:
+                    print("ok")
+                    break
+                else:
+                    print("not ok")
 
+            self.score += 20  # Aumentar puntuación
+            self.controlador_nivel+=20
 
 	    #Colision con obstaculos
         if (head_x,head_y) in self.obstaculos.obstacles:
@@ -129,7 +136,6 @@ class Game:
                 print("not ok")
 
         ###########################    
-        self.tablero.draw_nivel(self.screen,1)   
 
 
         while self.running:
@@ -137,6 +143,7 @@ class Game:
                 action = self.menu.handle_input()
                 if action == 'start':
                     self.controller = 2  # Entrar al juego
+                    self.tablero.draw_nivel(self.screen,1)   
                 elif action == 'quit':
                     self.running = False 
                 self.menu.draw(self)
