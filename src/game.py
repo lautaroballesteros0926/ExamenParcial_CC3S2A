@@ -40,7 +40,6 @@ class Game:
                 self.snake.body=[(10, 10)]
                 pygame.time.delay(400)
 
-
         # Colisión con el prfoodio cuerpo
         if len(self.snake.body) != len(set(self.snake.body)):
             self.snake.life=self.snake.life-1
@@ -51,18 +50,16 @@ class Game:
                 self.snake.body=[(10, 10)]
                 pygame.time.delay(400)
 
-     
-
-            
-        
+    
         # Colisión con Double_point
         if self.double_points.position == (head_x, head_y):
             self.snake.grow()
-            self.double_points.generar_power_up()
-            self.score += 20  # Aumentar puntuación
+            self.double_points.activate=True
             print(self.score)
-	#Colision con obstaculos
-	if(head_x,head_y) in self.obstaculos.obstacles:
+
+
+	    #Colision con obstaculos
+        if (head_x,head_y) in self.obstaculos.obstacles:
             self.snake.life=self.snake.life-1
             if self.snake.life==0:
                 self.running = False        
@@ -82,6 +79,7 @@ class Game:
                     break
                 else:
                     print("not ok")
+
             self.score += 10  # Aumentar puntuación
             self.controlador_nivel+=10
 
@@ -110,15 +108,23 @@ class Game:
 
     def game_loop(self):
         self.obstaculos.generar_obstaculos(3)  # Generar obstáculos
+        self.double_points.generar_power_up()
         #######################################
         #Se asegura que la comida no aparezca en la misma posicion que los obstaculos
         while True:
-            self.powerups.generar_power_up()
-            if self.powerups.position not in self.obstaculos.obstacles:
+            self.food.generar_power_up()
+            if self.food.position not in self.obstaculos.obstacles:
                 print("ok")
                 break
             else:
                 print("not ok")
+            self.double_points.generar_power_up()
+            if self.double_points.position not in self.obstaculos.obstacles:
+                print("ok")
+                break
+            else:
+                print("not ok")
+
         ###########################    
         self.tablero.draw_nivel(self.screen,1)   
 
@@ -130,13 +136,11 @@ class Game:
             self.screen.fill(BLACK)
             self.snake.draw(self.screen)
             self.obstaculos.draw(self.screen)
-
+            self.food.draw(self.screen)
             self.double_points.draw(self.screen)
-
-            self.powerups.draw(self.screen)
             self.tablero.draw_score(self.screen,self.score)
             self.tablero.draw_life(self.screen,self.snake.life)
-            if self.controlador_nivel==50:
+            if self.controlador_nivel>=50:
                 nivel=self.obstaculos.nivel
                 self.obstaculos.nivel=nivel+1
                 self.obstaculos.niveles(nivel)
