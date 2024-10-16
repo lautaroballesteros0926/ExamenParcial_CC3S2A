@@ -107,11 +107,19 @@ def check_posicionobstacle(context,posicion):
     
 @then('ocurre una colision')
 def end_game(context):
-
+    print(game.obstaculos.obstacles)
+    print(game.snake.body[0])
+    print(game.colision)
+    print(game.tablero.rows)
+    print(game.tablero.columns)
+    print(game.snake.life)
     game.check_collisions()
+    print(game.snake.life)
+    
+    print(game.colision)
     game.obstaculos.obstacles.pop()
     game.snake.body.pop()
-    assert not game.colision,"Se esperaba el jugador y el obstaculo colisionen"
+    assert game.colision,"Se esperaba el jugador y el obstaculo colisionen"
 
 
 
@@ -138,3 +146,20 @@ def limit_obstacles(context):
         assert  0 <= x <= game.tablero.columns-1, f"Obstáculo en x={x} fuera de los límites"
         assert 0 <= y <= game.tablero.rows-1, f"Obstáculo en y={y} fuera de los límites"
 
+
+#####################3
+
+@given('que me encuentro en el nivel {nivel:d}')
+def nivel(context,nivel):
+    game.obstaculos.nivel=nivel
+
+@when('obtengo {puntos:d} puntos')
+def puntosnivel(context,puntos):
+    game.score=50
+
+@then('debo avanzar al siguiente nivel')
+def up_nivel(context):
+    nivelinicial=game.obstaculos.nivel
+    game.level_up(game.score)
+    nivelfinal=game.obstaculos.nivel
+    assert (nivelinicial)<nivelfinal,"Debio subir de nivel"
