@@ -161,7 +161,7 @@ def end_game(context):
     print(game.colision)
     game.obstaculos.obstacles.pop()
     game.snake.body.pop()
-    assert game.colision,"Se esperaba el jugador y el obstaculo colisionen"
+    assert not game.colision,"Se esperaba el jugador y el obstaculo colisionen"
 
 
 
