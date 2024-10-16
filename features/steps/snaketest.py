@@ -82,6 +82,7 @@ def check_movement(context):
     
 #################################################################################
 
+
 # TEST PARA LOS POWERUPS
 
 @given('un power-up {powerup} aparece en el mapa')
@@ -119,6 +120,7 @@ def check_movement(context,score):
     
     
 #################################################################################
+
 @given('que la serpiente se encuentra en la posicion {posicion}')
 def check_posicionsnake(context,posicion):
     pattern=re.compile(r'(\d+),(\d+)')
@@ -178,3 +180,20 @@ def limit_obstacles(context):
         assert  0 <= x <= game.tablero.columns-1, f"Obstáculo en x={x} fuera de los límites"
         assert 0 <= y <= game.tablero.rows-1, f"Obstáculo en y={y} fuera de los límites"
 
+
+#####################3
+
+@given('que me encuentro en el nivel {nivel:d}')
+def nivel(context,nivel):
+    game.obstaculos.nivel=nivel
+
+@when('obtengo {puntos:d} puntos')
+def puntosnivel(context,puntos):
+    game.score=50
+
+@then('debo avanzar al siguiente nivel')
+def up_nivel(context):
+    nivelinicial=game.obstaculos.nivel
+    game.level_up(game.score)
+    nivelfinal=game.obstaculos.nivel
+    assert (nivelinicial)<nivelfinal,"Debio subir de nivel"

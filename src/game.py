@@ -40,8 +40,10 @@ class Game:
             "vidas del snake"
         )
         
+        self.colision = False
         self.running = True
         self.score = 0
+        self.double_points.position=None
         self.controller = 1 
         self.menu = Menu()
     def check_collisions(self):
@@ -72,7 +74,8 @@ class Game:
             self.snake.grow()
             while True:
                 self.double_points.generar_power_up()
-                if self.food.position not in self.obstaculos.obstacles:
+                if self.double_points.position not in self.obstaculos.obstacles:
+
                     print("ok")
                     break
                 else:
@@ -88,7 +91,7 @@ class Game:
                 self.running = False        
             else:
                 self.running = True  
-                self.colision = False
+                self.colision = True
                 self.snake.body=[(10, 10)]
                 pygame.time.delay(400)
                 
