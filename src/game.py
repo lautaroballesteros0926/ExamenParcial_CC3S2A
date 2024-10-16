@@ -61,6 +61,7 @@ class Game:
             while True:
                 self.double_points.generar_power_up()
                 if self.double_points.position not in self.obstaculos.obstacles:
+
                     print("ok")
                     break
                 else:
