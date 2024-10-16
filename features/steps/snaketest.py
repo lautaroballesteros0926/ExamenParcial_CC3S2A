@@ -1,13 +1,82 @@
 from src.game import Game
+from src.snake import Snake
 import pygame
 from behave import given,when,then
 import re
 pygame.init()   
-
 game=Game()
+snake=Snake()
+
+# TEST PARA EL MOVIMIENTO DE LA SNAKE 
+def movement(move):
+    if move=='izquierda' and snake.body == [(9,10)]:
+        return True
+    elif move=='derecha' and snake.body == [(11,10)]:
+        return True
+    elif move=='arriba' and snake.body == [(10,11)]:
+        return True
+    elif move=='abajo' and snake.body == [(10,9)]:
+        return True
+    else:
+        return False
+
+@given('que el usuario quiere mover a la serpiente en la direccion {direccion}')
+def check_movimiento(context,direccion):
+    pattern=re.compile(r'(izquierda|derecha|abajo|arriba)')
+    match=pattern.match(direccion.lower())
+    if match:
+        print('correcto')
+    else:
+        raise ValueError(f"No se pudo interpretar el movimiento: {direccion}")
 
 
+@when('el jugador presiona una tecla de direccion {direccion}')
+def do_movement(context,direccion):
+    pattern=re.compile(r'(izquierda|derecha|abajo|arriba)')
+    match=pattern.match(direccion.lower())
+    if match:
+        if match.group(1)=='izquierda':
+            snake.direction = (-1,0)
+            snake.move()
+            print(snake.body)
+        elif match.group(1)=='derecha':
+            snake.direction = (1,0)
+            snake.move()
+            print(snake.body)
+        elif match.group(1)=='abajo':
+            snake.direction = (0,-1)
+            snake.move()
+            print(snake.body)
+        elif match.group(1)=='arriba':
+            snake.direction = (0,1)
+            snake.move()
+            print(snake.body)
+        else:
+            print('No se intrepeto correctamente la tecla presionada')
+    else:
+        raise ValueError(f"No se pudo interpretar el boton presionado: {direccion}")
+    
+@then('la serpiente debe cambiar su dirección acorde a la tecla izquierda')
+def check_movement(context):
+    assert movement('izquierda'),"No se movio correctamente"
+    snake.body = [(10,10)]
 
+@then('la serpiente debe cambiar su dirección acorde a la tecla derecha')
+def check_movement(context):
+    assert movement('derecha'),"No se movio correctamente"
+    snake.body = [(10,10)]
+
+@then('la serpiente debe cambiar su dirección acorde a la tecla arriba')
+def check_movement(context):
+    assert movement('arriba'),"No se movio correctamente"
+    snake.body = [(10,10)]
+
+@then('la serpiente debe cambiar su dirección acorde a la tecla abajo')
+def check_movement(context):
+    assert movement('abajo'),"No se movio correctamente"
+    snake.body = [(10,10)]
+    
+#################################################################################
 @given('que la serpiente se encuentra en la posicion {posicion}')
 def check_posicionsnake(context,posicion):
     pattern=re.compile(r'(\d+),(\d+)')
