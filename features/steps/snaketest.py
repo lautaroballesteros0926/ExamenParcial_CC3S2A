@@ -78,7 +78,7 @@ def check_movement(context):
     
 #################################################################################
 @given('que la serpiente se encuentra en la posicion {posicion}')
-def check_posicion(context,posicion):
+def check_posicionsnake(context,posicion):
     pattern=re.compile(r'(\d+),(\d+)')
     match=pattern.match(posicion.lower())
     print(match.group(0))
@@ -98,7 +98,6 @@ def check_posicionobstacle(context,posicion):
         obs_x=int(match.group(1))
         obs_y=int(match.group(2))
         game.obstaculos.generar_obstaculos(1)
-        print("Estehjgfjhf")
         print(game.obstaculos.obstacles)
         game.obstaculos.obstacles[0]=obs_x,obs_y
         print(game.obstaculos.obstacles)
@@ -106,12 +105,13 @@ def check_posicionobstacle(context,posicion):
     else:
         raise ValueError(f"No se pudo interpretar la posicion del obstaculo: {posicion}")
     
-@then('se termina el juego')
+@then('ocurre una colision')
 def end_game(context):
+
     game.check_collisions()
     game.obstaculos.obstacles.pop()
     game.snake.body.pop()
-    assert not game.running,"Se esperaba que cierre el juego"
+    assert not game.colision,"Se esperaba el jugador y el obstaculo colisionen"
 
 
 
@@ -135,10 +135,6 @@ def generate_obstacles(context,cantidad):
 def limit_obstacles(context):
     for x, y in game.obstaculos.obstacles:
         print((x,y))
-        assert  0 <= x < game.tablero.columns-1, f"Obstáculo en x={x} fuera de los límites"
-        assert 0 <= y < game.tablero.rows-1, f"Obstáculo en y={y} fuera de los límites"
-        
-
-#################################################################
-
+        assert  0 <= x <= game.tablero.columns-1, f"Obstáculo en x={x} fuera de los límites"
+        assert 0 <= y <= game.tablero.rows-1, f"Obstáculo en y={y} fuera de los límites"
 

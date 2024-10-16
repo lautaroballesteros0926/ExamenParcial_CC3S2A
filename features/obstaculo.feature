@@ -3,9 +3,9 @@
   Característica: Obstaculos
 
     Escenario: Colision con un obstaculo
-      Dado que la serpiente se encuentra en la posicion 20,20
-      Cuando el obstaculo se encuentra en la posicion 20,20
-      Entonces se termina el juego
+      Dado que la serpiente se encuentra en la posicion 19,19
+      Cuando el obstaculo se encuentra en la posicion 19,19
+      Entonces ocurre una colision
 
     Escenario: Creacion de un obstaculo
       Dado un tablero con "30 columnas y 20 filas"

@@ -1,13 +1,16 @@
 import pygame
 
 GREEN = (0, 255, 0)
-CELL_SIZE = 20
+
+CELL_SIZE = 40
+
+
 class Snake:
     def __init__(self):
         self.body = [(10, 10)]  # Lista de tuplas representando las posiciones del cuerpo
         self.direction = (1, 0)  # Movimiento inicial hacia la derecha
         self.growing = False
-        self.is_life = True
+        self.life = 2
 
     def move(self):
         head_x, head_y = self.body[0]
@@ -29,3 +32,5 @@ class Snake:
     def set_direction(self, dir_x, dir_y):
         if (dir_x, dir_y) != (-self.direction[0], -self.direction[1]):  # Evitar moverse hacia la dirección opuesta
             self.direction = (dir_x, dir_y)
+
+
