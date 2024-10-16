@@ -3,8 +3,8 @@
   Característica: Obstaculos
 
     Escenario: Colision con un obstaculo
-      Dado que la serpiente se encuentra en la posicion 19,19
-      Cuando el obstaculo se encuentra en la posicion 19,19
+      Dado que la serpiente se encuentra en la posicion 10,10
+      Cuando el obstaculo se encuentra en la posicion 10,10
       Entonces ocurre una colision
 
     Escenario: Creacion de un obstaculo

@@ -26,9 +26,10 @@ class Game:
         self.snake = Snake()
         self.obstaculos = Obstaculos(self.tablero)
         self.controlador_nivel=0
-
+        self.colision = False
         self.running = True
         self.score = 0
+        self.double_points.position=None
         self.controller = 1 
         self.menu = Menu()
     def check_collisions(self):
@@ -59,7 +60,8 @@ class Game:
             self.snake.grow()
             while True:
                 self.double_points.generar_power_up()
-                if self.food.position not in self.obstaculos.obstacles:
+                if self.double_points.position not in self.obstaculos.obstacles:
+
                     print("ok")
                     break
                 else:
@@ -75,7 +77,7 @@ class Game:
                 self.running = False        
             else:
                 self.running = True  
-                self.colision = False
+                self.colision = True
                 self.snake.body=[(10, 10)]
                 pygame.time.delay(400)
                 
@@ -114,7 +116,15 @@ class Game:
                     self.snake.set_direction(1, 0)
                     break
     
-
+    def level_up(self,puntos):
+        if puntos>=50:
+            nivel=self.obstaculos.nivel
+            self.obstaculos.nivel=nivel+1
+            self.obstaculos.niveles(nivel)
+            self.snake.body=[(10, 10)]
+            self.controlador_nivel=0
+            self.tablero.draw_nivel(self.screen,self.obstaculos.nivel)   
+            self.snake.growing=False  
 
     def game_loop(self):
         self.obstaculos.generar_obstaculos(3)  # Generar obstáculos
@@ -158,17 +168,12 @@ class Game:
                 self.double_points.draw(self.screen)
                 self.tablero.draw_score(self.screen,self.score)
                 self.tablero.draw_life(self.screen,self.snake.life)
-                if self.controlador_nivel>=50:
-                    nivel=self.obstaculos.nivel
-                    self.obstaculos.nivel=nivel+1
-                    self.obstaculos.niveles(nivel)
-                    self.snake.body=[(10, 10)]
-                    self.controlador_nivel=0
-                    self.tablero.draw_nivel(self.screen,self.obstaculos.nivel)   
-                    self.snake.growing=False
+                self.level_up(self.controlador_nivel)
+
             pygame.display.flip()
             self.clock.tick(10)  # 10 FPS
 
         pygame.quit()
-       
-      
+
+     
+
